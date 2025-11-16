@@ -1,0 +1,6 @@
+# Build artifacts
+MyWebApp/target/
+# macOS
+.DS_Store
+# Logs
+*.log
