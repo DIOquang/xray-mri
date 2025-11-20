@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Image Classification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .models {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .model-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .upload-area.drag-over {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .preview {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .prediction {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        .confidence {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .probabilities {
+            margin-top: 15px;
+        }
+        
+        .prob-bar {
+            margin: 10px 0;
+        }
+        
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .prob-progress {
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffe0e0;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medical Image Classification</h1>
+            <p>AI-powered diagnosis assistance using DenseNet-121</p>
+        </div>
+        
+        <div class="models">
+            <!-- X-ray Model -->
+            <div class="model-card">
+                <h2>🫁 Chest X-Ray Analysis</h2>
+                <p style="margin-bottom: 20px; color: #666;">Pneumonia Detection (84.46% accuracy)</p>
+                
+                <div class="upload-area" id="xrayUpload" onclick="document.getElementById('xrayFile').click()">
+                    <div class="upload-icon">📁</div>
+                    <p>Click or drag image here</p>
+                    <small style="color: #999;">Supported: JPG, PNG (max 16MB)</small>
+                </div>
+                <input type="file" id="xrayFile" accept="image/*" onchange="handleFileSelect(event, 'xray')">
+                
+                <div class="preview" id="xrayPreview"></div>
+                
+                <button class="btn" id="xrayBtn" onclick="predictXray()" disabled>Analyze X-Ray</button>
+                
+                <div class="loading" id="xrayLoading">
+                    <div class="spinner"></div>
+                    <p>Analyzing image...</p>
+                </div>
+                
+                <div class="error" id="xrayError"></div>
+                
+                <div class="result" id="xrayResult"></div>
+            </div>
+            
+            <!-- MRI Model -->
+            <div class="model-card">
+                <h2>🧠 Brain MRI Analysis</h2>
+                <p style="margin-bottom: 20px; color: #666;">Tumor Classification (97.73% accuracy)</p>
+                
+                <div class="upload-area" id="mriUpload" onclick="document.getElementById('mriFile').click()">
+                    <div class="upload-icon">📁</div>
+                    <p>Click or drag image here</p>
+                    <small style="color: #999;">Supported: JPG, PNG (max 16MB)</small>
+                </div>
+                <input type="file" id="mriFile" accept="image/*" onchange="handleFileSelect(event, 'mri')">
+                
+                <div class="preview" id="mriPreview"></div>
+                
+                <button class="btn" id="mriBtn" onclick="predictMRI()" disabled>Analyze MRI</button>
+                
+                <div class="loading" id="mriLoading">
+                    <div class="spinner"></div>
+                    <p>Analyzing image...</p>
+                </div>
+                
+                <div class="error" id="mriError"></div>
+                
+                <div class="result" id="mriResult"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>⚠️ For research and educational purposes only. Not for clinical use.</p>
+            <p style="margin-top: 10px;">Powered by TensorFlow & DenseNet-121</p>
+        </div>
+    </div>
+    
+    <script>
+        let xrayFile = null;
+        let mriFile = null;
+        const API_URL = 'http://localhost:5000';
+        
+        function handleFileSelect(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (type === 'xray') {
+                xrayFile = file;
+                showPreview(file, 'xrayPreview');
+                document.getElementById('xrayBtn').disabled = false;
+            } else {
+                mriFile = file;
+                showPreview(file, 'mriPreview');
+                document.getElementById('mriBtn').disabled = false;
+            }
+        }
+        
+        function showPreview(file, previewId) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function predictXray() {
+            if (!xrayFile) return;
+            
+            const loading = document.getElementById('xrayLoading');
+            const result = document.getElementById('xrayResult');
+            const error = document.getElementById('xrayError');
+            const btn = document.getElementById('xrayBtn');
+            
+            loading.classList.add('show');
+            result.classList.remove('show');
+            error.classList.remove('show');
+            btn.disabled = true;
+            
+            const formData = new FormData();
+            formData.append('file', xrayFile);
+            
+            try {
+                const response = await fetch(`${API_URL}/predict/xray`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResult(data, 'xrayResult');
+                } else {
+                    showError(data.error, 'xrayError');
+                }
+            } catch (err) {
+                showError('Failed to connect to server', 'xrayError');
+            } finally {
+                loading.classList.remove('show');
+                btn.disabled = false;
+            }
+        }
+        
+        async function predictMRI() {
+            if (!mriFile) return;
+            
+            const loading = document.getElementById('mriLoading');
+            const result = document.getElementById('mriResult');
+            const error = document.getElementById('mriError');
+            const btn = document.getElementById('mriBtn');
+            
+            loading.classList.add('show');
+            result.classList.remove('show');
+            error.classList.remove('show');
+            btn.disabled = true;
+            
+            const formData = new FormData();
+            formData.append('file', mriFile);
+            
+            try {
+                const response = await fetch(`${API_URL}/predict/mri`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResult(data, 'mriResult');
+                } else {
+                    showError(data.error, 'mriError');
+                }
+            } catch (err) {
+                showError('Failed to connect to server', 'mriError');
+            } finally {
+                loading.classList.remove('show');
+                btn.disabled = false;
+            }
+        }
+        
+        function displayResult(data, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            
+            let probsHTML = '';
+            for (const [label, prob] of Object.entries(data.probabilities)) {
+                probsHTML += `
+                    <div class="prob-bar">
+                        <div class="prob-label">
+                            <span>${label}</span>
+                            <span>${prob}%</span>
+                        </div>
+                        <div class="prob-progress">
+                            <div class="prob-fill" style="width: ${prob}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = `
+                <h3>📊 Analysis Results</h3>
+                <div class="prediction">${data.prediction}</div>
+                <div class="confidence">Confidence: ${data.confidence}%</div>
+                <div class="probabilities">
+                    <h4 style="margin-bottom: 10px;">Class Probabilities:</h4>
+                    ${probsHTML}
+                </div>
+            `;
+            
+            resultDiv.classList.add('show');
+        }
+        
+        function showError(message, errorId) {
+            const errorDiv = document.getElementById(errorId);
+            errorDiv.textContent = `Error: ${message}`;
+            errorDiv.classList.add('show');
+        }
+        
+        // Drag and drop support
+        ['xrayUpload', 'mriUpload'].forEach(id => {
+            const elem = document.getElementById(id);
+            
+            elem.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                elem.classList.add('drag-over');
+            });
+            
+            elem.addEventListener('dragleave', () => {
+                elem.classList.remove('drag-over');
+            });
+            
+            elem.addEventListener('drop', (e) => {
+                e.preventDefault();
+                elem.classList.remove('drag-over');
+                
+                const file = e.dataTransfer.files[0];
+                const type = id === 'xrayUpload' ? 'xray' : 'mri';
+                const fileInput = document.getElementById(type + 'File');
+                
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                
+                handleFileSelect({ target: fileInput }, type);
+            });
+        });
+    </script>
+</body>
+</html>
