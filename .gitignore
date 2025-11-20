@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Data (keep datasets out of git)
+data/**
+!data/.keep
+
+# Models & artifacts
+models/**
+!models/.keep
+*.h5
+*.keras
+*.png
+
+# Logs
+logs/**
+
+# VS Code
+.vscode/

@@ -1,0 +1,8 @@
+tensorflow==2.20.0
+scikit-learn
+numpy
+matplotlib
+seaborn
+pillow
+kaggle
+opencv-python

@@ -1,0 +1,672 @@
+﻿
+
+LỜI NÓI ĐẦU
+Bài báo cáo được thực hiện trong khoảng 2 tháng, kết hợp nhiều kiến thức mà nhóm  đã tìm hiểu. Đây cũng là bước đầu  chúng em đi sâu tìm hiểu, nghiên cứu và thực nghiệm một đề tài của chuyên ngành trí tuệ nhân tạo. Do vậy, sẽ còn nhiều thiếu sót, em rất mong nhận được những ý kiến đóng góp của quý Thầy Cô và các bạn để chúng em có thể hoàn thiện đồ án một cách tốt nhất. 
+Em xin chân thành cảm ơn!
+                                                                            Hà Nội tháng 6 năm 2025
+NHẬN XÉT ĐÁNH GIÁ CHO ĐIỂM
+(Của giảng viên hướng dẫn) ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… ………………………………………………………………………………………… Điểm: .................................. (bằng chữ…………………………………………………)
+                                                                                Hà Nội,...ngày... tháng.12 năm 2023. 
+CÁN BỘ, GIẢNG VIÊN HƯỚNG DẪN 
+                                                                                                     (ký, họ tên)
+Mục lục
+
+CHƯƠNG 1: GIỚI THIỆU VỀ X-RAY VÀ MRI	6
+1.1 Giới thiệu chung về X-ray và MRI	6
+1.2 Mục tiêu của đề tài	6
+CHƯƠNG 2 : CƠ SỞ LÝ THUYẾT	7
+2.1 Giới thiệu về Deep Learning:	7
+2.1.1 Giới thiệu về học sâu( Deep learning):	7
+2.1.2 Cách thức hoạt động	7
+2.2 Giới thiệu về Transfer learning	8
+2.3 Giới thiệu về Resnet và Densenet	8
+2.2.1 Mạng CNN	8
+2.2.2 Mạng Resnet	9
+2.2.3 Mô hình Resnet 50	11
+2.2.4 Mạng Densenet:	14
+2.2.5 Mạng Densenet-121	15
+2.2.6 Phương pháp tiếp cận bài toán:	15
+CHƯƠNG 3: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG	17
+3.1 Mục tiêu của thiết kế	17
+3.2 Kiến trúc tổng thể	17
+3.3 Mô hình Resnet 50	18
+3.3.1 Kiến trúc mô hình ResNet-50	18
+3.3.2 Kiểu huấn luyện mô hình	19
+3.3.3 Chiến lược huấn luyện tổng thể và cấu hình thực nghiệm	21
+3.4 Mô hình Densenet	24
+3.4.1 Kiến trúc mô hình DenseNet-121:	24
+3.4.2 Kiểu huấn luyện mô hình	25
+3.4.3 Chiến lược huấn luyện tổng thể và cấu hình thực nghiệm 	28
+3.5 Ưu điểm của thiết kế hai mô hình	34
+3.5.1 Phân tách nhiệm vụ rõ ràng, tối ưu hoá chuyên biệt	34
+3.5.2 Tăng tính mô-đun, dễ kiểm soát và bảo trì	35
+3.5.3 Tối ưu hóa tài nguyên huấn luyện và dữ liệu	35
+3.5.4 Khả năng mở rộng linh hoạt	35
+3.5.5 Hỗ trợ và cải tiến chuyên sâu	35
+Chương 4 ĐÁNH GIÁ KẾT QUẢ THỰC NGHIỆM	37
+4.1 Mục tiêu đánh giá	37
+4.2 Đánh giá mô hình A – Chẩn đoán viêm phổi bằng ResNet-50	38
+4.2.1 Độ chính xác và độ mất mát trên tập kiểm tra	38
+4.2.2 Ma trận nhầm lẫn (Confusion Matrix)	38
+4.2.3 Báo cáo phân loại chi tiết	39
+4.2.4 Trực quan hoá Grad-CAM	39
+4.3 Đánh giá mô hình B – Chẩn đoán u não bằng DenseNet121	40
+4.3.1 Độ chính xác và độ mất mát trên tập kiểm tra	40
+4.3.2 Ma trận nhầm lẫn (Confusion Matrix)	41
+4.3.3 Báo cáo phân loại chi tiết	41
+4.3.4 Trực quan hóa Grad-CAM	42
+	42
+	42
+	43
+	43
+	43
+	43
+	43
+	43
+4.4 So sánh hai mô hình ResNet-50 và DenseNet-121	44
+
+
+
+ 
+CHƯƠNG 1: GIỚI THIỆU VỀ X-RAY VÀ MRI
+        1.1 Giới thiệu chung về X-ray và MRI
+    • Chụp X-quang (X-ray) là kỹ thuật sử dụng chùm tia X chiếu qua cơ thể để tạo ra hình ảnh của các cấu trúc bên trong. Hình ảnh thu được sẽ được máy vi tính xử lý để hiển thị trên màn hình hoặc in ra phim. Độ phân giải (hay còn gọi là độ sắc nét) của hình ảnh phụ thuộc vào chất lượng máy chụp và công nghệ xử lý ảnh. Máy chụp hiện đại cho hình ảnh có độ phân giải cao, giúp bác sĩ quan sát rõ hơn các chi tiết của xương, khớp và các mô mềm. Tùy theo mức độ hấp thụ tia X của từng bộ phận, các tổn thương hoặc bất thường bên trong cơ thể sẽ được thể hiện trên phim bằng các vùng có độ đậm hoặc nhạt khác nhau.
+    • Chụp cộng hưởng từ hay còn gọi là chụp MRI là kỹ thuật dựa vào đặc điểm của các nguyên tử Hydrogen trong cơ thể người khi bị tác động bởi từ trường bên ngoài sẽ biến đổi và phát ra tín hiệu. Máy chụp cộng hưởng từ dùng nhiều chuỗi xung để thu được nhiều hình ảnh khác nhau thể hiện các tổn thương, nhất là những tổn thương mô mềm.
+        1.2 Mục tiêu của đề tài
+Đề tài “Ứng dụng học sâu để hỗ trợ chẩn đoán viêm phổi từ ảnh X-ray và phân loại u não từ ảnh MRI” hướng tới việc nghiên cứu và ứng dụng các kỹ thuật học sâu hiện đại nhằm xây dựng một hệ thống hỗ trợ chẩn đoán bệnh trên ảnh y học. Cụ thể, các mục tiêu của đề tài bao gồm:
+    • Xây dựng hai mô hình học sâu chuyên biệt: một mô hình để phát hiện viêm phổi (Pneumonia) từ ảnh X-ray ngực và một mô hình để phân loại các loại u não (Glioma, Meningioma, Pituitary) từ ảnh cộng hưởng từ (MRI).
+    • Thiết kế và triển khai pipeline xử lý ảnh y học bao gồm các bước tiền xử lý (chuẩn hóa, tăng cường dữ liệu, xử lý ảnh 3D nếu cần), trích xuất đặc trưng, huấn luyện và đánh giá mô hình học sâu.
+
+
+CHƯƠNG 2 : CƠ SỞ LÝ THUYẾT
+    2.1 Giới thiệu về Deep Learning:
+    2.1.1 Giới thiệu về học sâu( Deep learning):
+    • Deep Learning (học sâu) có thể được xem là một lĩnh vực con của Machine Learning (học máy) – ở đó các máy tính sẽ học và cải thiện chính nó thông qua các thuật toán. Deep Learning được xây dựng dựa trên các khái niệm phức tạp hơn rất nhiều, chủ yếu hoạt động với các mạng nơ-ron nhân tạo để bắt chước khả năng tư duy và suy nghĩ của bộ não con người.
+    2.1.2 Cách thức hoạt động 
+    • Deep Learning là một phương pháp trong Machine Learning, trong đó mạng nơ-ron nhân tạo được sử dụng để mô phỏng khả năng tư duy của con người.
+    • Một mạng nơ-ron bao gồm nhiều lớp (layer) khác nhau, số lượng layer càng nhiều thì mạng sẽ càng “sâu”. Trong mỗi layer là các nút mạng (node) và được liên kết với những lớp liền kề khác. Mỗi kết nối giữa các node sẽ có một trọng số tương ứng, trọng số càng cao thì ảnh hưởng của kết nối này đến mạng nơ-ron càng lớn.
+    • Mỗi nơ-ron sẽ có một hàm kích hoạt, về cơ bản thì có nhiệm vụ “chuẩn hoá” đầu ra từ nơ-ron này. Dữ liệu được người dùng đưa vào mạng nơ-ron sẽ đi qua tất cả layer và trả về kết quả ở layer cuối cùng, gọi là output layer. Trong quá trình huấn luyện mô hình mạng nơ-ron, các trọng số sẽ được thay đổi và nhiệm vụ của mô hình là tìm ra bộ giá trị của trọng số sao cho phán đoán là tốt nhất.
+
+
+
+    2.2 Giới thiệu về Transfer learning
+    • Transfer learning là quá trình tận dụng kiến thức (weights, features, representations) học được từ một mô hình đã được huấn luyện trên một tập dữ liệu lớn và tổng quát để áp dụng cho một bài toán mới với ít dữ liệu hơn.
+    • Quá trình Transfer learning sẽ tận dụng lại các đặc trưng được học từ pre-trained model. Kiến trúc mô hình sử dụng transfer learning bao gồm 2 phần
+    • Một mạng Based network có tác dụng trích lọc đặc trưng, based network này được trích xuất từ một phần của pre-trained model sau khi loại bỏ các top fully connected layers
+    • Các lớp Fully Connected Layers giúp giảm chiều dữ liệu và tính toán phân phối xác suất ở output. Bản chất Fully Connected Layers chính là một mạng Multiple Layer Perceptron (MLP) - một kiến trúc nguyên thủy nhất của thuật toán neural network. Tùy vào các bài toán cụ thể sẽ điều chỉnh số lượng các units ở output
+    • Quá trình khởi tạo mô hình ta sẽ tận dụng các weights của Based network. Dữ liệu ảnh sau khi đi qua Based network sẽ tạo ra những đặc trưng tốt, những đặc trưng này chính là đầu vào cho mạng MLP để dự báo cho bài toán yêu cầu.
+
+    2.3 Giới thiệu về Resnet và Densenet
+    2.2.1 Mạng CNN
+    • Trong mạng neural, mô hình mạng neural tích chập (CNN) là 1 trong những mô hình để nhận dạng và phân loại hình ảnh. Trong đó, xác định đối tượng và nhận dạng khuôn mặt là 1 trong số những lĩnh vực mà CNN được sử dụng rộng rãi.
+    • Mạng CNN là một tập hợp các lớp Convolution chồng lên nhau và sử dụng các hàm nonlinear activation như ReLU và tanh để kích hoạt các trọng số trong các node. Mỗi một lớp sau khi thông qua các hàm kích hoạt sẽ tạo ra các thông tin trừu tượng hơn cho các lớp tiếp theo. Mỗi một lớp sau khi thông qua các hàm kích hoạt sẽ tạo ra các thông tin trừu tượng hơn cho các lớp tiếp theo. Trong mô hình mạng truyền ngược (feedforward neural network) thì mỗi neural đầu vào (input node) cho mỗi neural đầu ra trong các lớp tiếp theo. Mô hình này gọi là mạng kết nối đầy đủ (fully connected layer) hay mạng toàn vẹn (affine layer). Còn trong mô hình CNNs thì ngược lại. Các layer liên kết được với nhau thông qua cơ chế convolution.
+    • Layer tiếp theo là kết quả convolution từ layer trước đó, nhờ vậy mà ta có được các kết nối cục bộ. Như vậy mỗi neuron ở lớp kế tiếp sinh ra từ kết quả của filter áp đặt lên một vùng ảnh cục bộ của neuron trước đó. Mỗi một lớp được sử dụng các filter khác nhau thông thường có hàng trăm hàng nghìn filter như vậy và kết hợp kết quả của chúng lại. Ngoài ra có một số layer khác như pooling/subsampling layer dùng để chắt lọc lại các thông tin hữu ích hơn (loại bỏ các thông tin nhiễu).
+    • Trong quá trình huấn luyện mạng (traning) CNN tự động học các giá trị qua các lớp filter dựa vào cách thức mà bạn thực hiện. Ví dụ trong tác vụ phân lớp ảnh, CNNs sẽ cố gắng tìm ra thông số tối ưu cho các filter tương ứng theo thứ tự raw pixel > edges > shapes > facial > high-level features. Layer cuối cùng được dùng để phân lớp ảnh.
+	
+    • Trong mô hình CNN có 2 khía cạnh cần quan tâm là tính bất biến (Location Invariance) và tính kết hợp (Compositionality). Với cùng một đối tượng, nếu đối tượng này được chiếu theo các gốc độ khác nhau (translation, rotation, scaling) thì độ chính xác của thuật toán sẽ bị ảnh hưởng đáng kể.
+    • Pooling layer sẽ cho bạn tính bất biến đối với phép dịch chuyển (translation), phép quay (rotation) và phép co giãn (scaling). Tính kết hợp cục bộ cho ta các cấp độ biểu diễn thông tin từ mức độ thấp đến mức độ cao và trừu tượng hơn thông qua convolution từ các filter.
+    2.2.2 Mạng Resnet
+    • Mạng ResNet (R) là một mạng CNN được thiết kế để làm việc với hàng trăm lớp. Một vấn đề xảy ra khi xây dựng mạng CNN với nhiều lớp chập sẽ xảy ra hiện tượng Vanishing Gradient dẫn tới quá trình học tập không tốt.
+    • Varnishing Gradient: 
+    • Backpropagation Algorithm là một kỹ thuật thường được sử dụng trong quá trình tranining. Ý tưởng chung của thuật toán lá sẽ đi từ output layer đến input layer và tính toán gradient của cost function tương ứng cho từng parameter (weight) của mạng. Gradient Descent sau đó được sử dụng để cập nhật các parameter đó.
+
+    • Toàn bộ quá trình trên sẽ được lặp đi lặp lại cho tới khi mà các parameter của network được hội tụ. Thông thường chúng ta sẽ có một hyperparametr (số Epoch - số lần mà traninig set được duyệt qua một lần và weights được cập nhật) định nghĩa cho số lượng vòng lặp để thực hiện quá trình này. Nếu số lượng vòng lặp quá nhỏ thì ta gặp phải trường hợp mạng có thể sẽ không cho ra kết quả tốt và ngược lại thời gian tranining sẽ lâu nếu số lượng vòng lặp quá lớn.
+
+    • Tuy nhiên, trong thực tế Gradients thường sẽ có giá trị nhỏ dần khi đi xuống các layer thấp hơn. Dẫn đến kết quả là các cập nhật thực hiện bởi Gradients Descent không làm thay đổi nhiều weights của các layer đó và làm chúng không thể hội tụ và mạng sẽ không thu được kết quả tốt
+    • Kiến trúc mạng Resnet: Ý tưởng chính của ResNet là sử dụng kết nối tắt đồng nhất để xuyên qua một hay nhiều lớp. Một khối như vậy được gọi là một residual block như trong hình sau:
+
+    • Một khối residual cơ bản trong ResNet có cấu trúc như sau:
+    • y=F(x,{Wi})+x
+Trong đó:
+    • x là đầu vào của khối.
+    • y là đầu ra của khối.
+    • F(x,{Wi}) là hàm residual, thường được biểu diễn bằng một chuỗi các lớp tích chập với trọng số Wi.
+    • Nguyên lý hoạt động:
+    • Nguyên lý hoạt động của ResNet dựa trên việc thay vì học trực tiếp hàm H(x), mô hình sẽ học một hàm residual F(x)=H(x)–x. Sau đó, đầu ra của mô hình sẽ là:
+
+    • Cách tiếp cận này dựa trên giả định rằng việc học một hàm sai khác F(x) sẽ dễ dàng hơn so với việc học trực tiếp hàm H(x). Khi mô hình học được F(x), nó thực chất đang học cách “điều chỉnh” đầu vào x để đạt được đầu ra mong muốn H(x). Nhờ vào các kết nối tắt (skip connections), các tín hiệu thông tin có thể dễ dàng được truyền qua mạng mà không bị suy giảm hoặc mất mát, đặc biệt khi mạng trở nên rất sâu.
+
+    2.2.3 Mô hình Resnet 50
+    • ResNet-50 là một mạng Convolutional Neural Network (CNN) sâu gồm 50 lớp, với kiến trúc Residual Learning, cho phép huấn luyện các mạng rất sâu mà không gặp vanishing gradient, đạt hiệu quả rất cao trong nhận dạng ảnh và các bài toán thị giác máy tính.
+    • ResNet đã giải quyết vấn đề này bằng cách sử dụng các Khối dư cho phép thông tin chảy trực tiếp qua các kết nối bỏ qua, giảm thiểu vấn đề độ dốc biến mất. Khối dư được sử dụng trong ResNet-50 được gọi là Khối dư Bottleneck. Khối này có kiến ​​trúc sau:
+
+
+    • Các thành phần của một residual block trong ResNet-50:
+    • ReLU (Rectified Linear Unit):
+    • Hàm kích hoạt ReLU được áp dụng sau mỗi lớp tích chập (convolutional layer) và lớp chuẩn hóa hàng loạt (Batch Normalization).
+    • ReLU chỉ cho phép các giá trị dương đi qua, giúp mạng phi tuyến tính — đây là yếu tố rất quan trọng để mạng có thể học được các mẫu phức tạp trong dữ liệu.
+    • Convolution layer: Mỗi residual block trong ResNet-50 thường bao gồm 3 lớp tích chập (convolutional layers), kèm BatchNorm và ReLU sau mỗi lớp:
+    • Lớp tích chập đầu tiên: sử dụng bộ lọc 1x1
+→ có tác dụng giảm số lượng kênh đặc trưng (channels) → giảm chiều dữ liệu → giúp tăng tốc độ tính toán mà vẫn giữ lại thông tin quan trọng.
+    • Lớp tích chập thứ hai: sử dụng bộ lọc 3x3
+→ có nhiệm vụ khai thác các đặc trưng không gian (spatial features) trong ảnh.
+    • Lớp tích chập thứ ba: lại sử dụng bộ lọc 1x1
+→ có tác dụng khôi phục lại số lượng kênh đặc trưng ban đầu, để chuẩn bị cộng với shortcut connection.
+    • Shortcut Connection:
+    • Điểm quan trọng nhất trong residual block là shortcut connection.
+    • Nó cho phép đầu vào ban đầu của block được cộng trực tiếp vào đầu ra của chuỗi các lớp tích chập.
+    • Nhờ đó, thông tin từ các tầng trước đó được giữ nguyên và truyền qua các tầng sâu hơn — ngay cả khi các lớp tích chập không học được thêm gì.
+    • Cơ chế này giúp khắc phục vanishing gradient và giúp huấn luyện được các mạng rất sâu.
+    • Xây dựng mạng Resnet 50
+    • Mô tả chi tiết:
+
+    • “ID BLOCK” trong hình trên là viết tắt của từ Identity block và ID BLOCK x3 nghĩa là có 3 khối Identity block chồng lên nhau. Nội dung hình trên như sau :
+    • Zero-padding : Input với (3,3)
+    • Stage 1 : Tích chập (Conv1) với 64 filters với shape(7,7), sử dụng stride (2,2). BatchNorm, MaxPooling (3,3).
+    • Stage 2 : Convolutiontal block sử dụng 3 filter với size 64x64x256, f=3, s=1. Có 2 Identity blocks với filter size 64x64x256, f=3.
+    • Stage 3 : Convolutional sử dụng 3 filter size 128x128x512, f=3,s=2. Có 3 Identity blocks với filter size 128x128x512, f=3.
+    • Stage 4 : Convolutional sử dụng 3 filter size 256x256x1024, f=3,s=2. Có 5 Identity blocks với filter size 256x256x1024, f=3.
+    • Stage 5 :Convolutional sử dụng 3 filter size 512x512x2048, f=3,s=2. Có 2 Identity blocks với filter size 512x512x2048, f=3.
+    • The 2D Average Pooling : sử dụng với kích thước (2,2).
+    • The Flatten.
+    • Fully Connected (Dense) : sử dụng softmax activation.
+    2.2.4 Mạng Densenet:
+    • DenseNet là một kiến trúc mạng nơ-ron sâu được đề xuất nhằm khắc phục các nhược điểm tồn tại trong các mạng Convolutional Neural Network (CNN) truyền thống. Ý tưởng chủ đạo của DenseNet là gia tăng số lượng kết nối giữa các lớp, từ đó giúp cải thiện việc lan truyền thông tin và gradient trong toàn bộ mạng. Mô hình này đã được chứng minh có hiệu quả cao trong nhiều tác vụ về xử lý ảnh, phân loại hình ảnh và các bài toán trong lĩnh vực thị giác máy tính.
+    • Trong các mạng CNN truyền thống, việc huấn luyện các mạng rất sâu gặp phải vấn đề vanishing gradient. Cụ thể, khi thực hiện lan truyền ngược, gradient có xu hướng giảm dần khi đi qua nhiều lớp, dẫn đến việc các lớp đầu tiên không được cập nhật trọng số hiệu quả. Điều này làm giảm khả năng học các đặc trưng quan trọng ở các lớp đầu.
+    • Để khắc phục hạn chế này, DenseNet đã mở rộng ý tưởng của ResNet bằng cách thay vì cộng, các feature map của tất cả các lớp trước đó được nối (concatenate) và đưa làm đầu vào cho các lớp sau. Nhờ đó:
+    • Thông tin được lan truyền tối đa giữa các lớp.
+    • Việc sử dụng lại các feature map giúp giảm thiểu việc học lặp lại.
+    • Gradient được truyền đi mạnh mẽ, giảm thiểu hiện tượng vanishing gradient.
+    • Cụ thể, trong mạng gồm L lớp, DenseNet sẽ có tổng cộng L(L+1)/2 kết nối giữa các lớp — nhiều hơn rất nhiều so với CNN truyền thống hay ResNet.
+    • Kiến trúc tổng quan:
+    • Mạng DenseNet được chia thành các khối gọi là Dense Block. Trong mỗi Dense Block, mỗi lớp nhận toàn bộ feature map của tất cả các lớp trước đó thông qua phép nối. Mỗi lớp trong Dense Block thường có cấu trúc: Batch Normalization → ReLU → Convolution 3x3.
+
+    • Do việc nối feature map làm tăng nhanh số lượng kênh, DenseNet sử dụng Transition Layer giữa các Dense Block để giảm số lượng kênh và kích thước feature map. Transition Layer thường có cấu trúc:
+Batch Normalization → Convolution 1x1 → Average Pooling 2x2.
+    • Để giảm số lượng tham số và tăng hiệu quả tính toán, DenseNet sử dụng thêm Bottleneck Layer, là một lớp Convolution 1x1 đặt trước Convolution 3x3 trong các Dense Block.
+    • DenseNet giới thiệu một siêu tham số gọi là Growth Rate (k) — số lượng feature map mới được tạo ra bởi mỗi lớp. Nhờ việc sử dụng lại feature map, DenseNet có thể duy trì một growth rate nhỏ (ví dụ k=12) mà vẫn đạt được hiệu suất cao.
+    2.2.5 Mạng Densenet-121
+    • DenseNet-121 - một biến thể của DenseNet với 121 lớp. Mã được triển khai bằng PyTorch, một thư viện học máy mã nguồn mở phổ biến. Mã định nghĩa ba lớp: Bottleneck, Transition và DenseNet. Lớp Bottleneck biểu diễn lớp bottleneck của kiến ​​trúc DenseNet. Lớp Transition biểu diễn lớp transition, được sử dụng để giảm chiều không gian của bản đồ đặc điểm. Lớp DenseNet biểu diễn toàn bộ kiến ​​trúc DenseNet.
+    • Thành phần:
+    • Một khối Dense Block gồm nhiều lớp conv nhỏ dạng:
+BN → ReLU → 1x1 Conv → BN → ReLU → 3x3 Conv
+    • Growth rate (k): số kênh đầu ra của mỗi lớp. Mặc định k=32 cho DenseNet-121.
+    • Đầu ra các lớp sẽ được concatenate liên tục, làm tăng số lượng kênh.
+    • Transition Layer được dùng giữa các Dense Block để:
+    • Giảm số kênh thông qua 1x1 Conv.
+    • Giảm kích thước không gian qua AvgPooling (stride 2).
+    • Đặc điểm nổi bật:
+    • Truyền thông tin hiệu quả nhờ kết nối dày đặc.
+    • Số tham số ít hơn so với ResNet tương đương.
+    • Giảm hiện tượng vanishing gradient.
+    • Tái sử dụng đặc trưng tốt.
+    • Khả năng tổng quát tốt hơn.
+    2.2.6 Phương pháp tiếp cận bài toán:
+    • Trong đề tài này, nhóm lựa chọn cách tiếp cận bài toán hỗ trợ chẩn đoán bệnh từ hình ảnh y học thông qua hai giai đoạn chính: (1) trích xuất đặc trưng và phân loại từ ảnh X-ray và MRI, và (2) tổng hợp kết quả nhằm hỗ trợ bác sĩ đưa ra chẩn đoán chính xác.
+    • Đối với ảnh X-ray, nhóm sử dụng mạng ResNet-50 để nhận diện và phân loại các bất thường. ResNet-50 với kiến trúc residual block giúp khắc phục hiện tượng varnishing gradient khi huấn luyện mạng sâu, đồng thời cho phép mô hình học được các đặc trưng phức tạp từ ảnh y học. Nhờ khả năng tái sử dụng thông tin qua các kết nối tắt, ResNet-50 đảm bảo hiệu quả huấn luyện ngay cả với các tập dữ liệu có độ nhiễu cao như ảnh X-ray.
+    • Đối với ảnh MRI, nhóm lựa chọn sử dụng mạng DenseNet-121. Khác với ResNet, DenseNet 121 sử dụng các kết nối dày đặc giữa 121 lớp (dense connections), giúp tối ưu hóa việc khai thác đặc trưng và truyền gradient mạnh mẽ qua toàn mạng. Kiến trúc này đặc biệt phù hợp với ảnh MRI, vốn có độ phân giải cao và chứa nhiều thông tin chi tiết về cấu trúc mô mềm. Nhờ đó, DenseNet giúp mô hình học được các đặc trưng tinh vi hơn, hỗ trợ phân biệt rõ ràng giữa các trạng thái bệnh lý.
+    • Phương pháp tiếp cận này không chỉ giúp tận dụng các thế mạnh riêng của từng kiến trúc mạng cho từng loại ảnh đầu vào, mà còn đảm bảo tính linh hoạt và khả năng mở rộng của hệ thống. Về lâu dài, hệ thống có thể được mở rộng để hỗ trợ thêm nhiều loại ảnh y học khác và cải thiện độ chính xác trong các bài toán chẩn đoán phức tạp hơn.
+
+CHƯƠNG 3: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
+Chương này sẽ trình bày chi tiết thiết kế hệ thống hỗ trợ chẩn đoán bệnh từ hình ảnh y học, bao gồm hai mô hình chính: Model A dùng để phân tích và nhận diện bất thường từ ảnh X-ray thông qua mạng ResNet-50, và Model B dùng để xử lý ảnh MRI với mạng DenseNet nhằm trích xuất đặc trưng chuyên sâu và hỗ trợ phân loại bệnh lý.
+Thiết kế hai tầng mô hình giúp tận dụng tối đa đặc điểm riêng biệt của từng loại ảnh y học, đồng thời đảm bảo khả năng mở rộng và linh hoạt của hệ thống. Việc phân tách pipeline theo từng loại ảnh không chỉ giúp tối ưu hóa hiệu quả xử lý, mà còn phù hợp với xu hướng thiết kế mô hình học sâu hiện đại trong bài toán phân tích ảnh và chẩn đoán hỗ trợ lâm sàng.
+    3.1 Mục tiêu của thiết kế
+    • Mục tiêu của hệ thống là xây dựng 1 mô hình có khả năng phân loại bệnh lý thông qua ảnh MRI và Ảnh X_ray. Từ đó có thể giảm tải cho bác sĩ trong khâu sàng lọc ban đầu. Để giải quyết bài toán này, nhóm chia hệ thống thành 2 giai đoạn xử lý chính, tương ứng với hai mô hình riêng biệt:
+    • Mô hình A: Phân Tích và nhận diện viêm phổi bằng mạng ResNet 50
+    • Mô hình 2:  Phân loại ba loại u não (glioma, meningioma, pituitary) từ ảnh MRI bằng mạng DenseNet121.
+    • Đây là 2 loại bệnh phổ biến và có thể gây hậu quả nghiêm trọng nếu không được phát hiện sớm. Hệ thống hỗ trợ chuẩn đoán sẽ giúp:
+    • Tăng khả năng phát hiện sớm.
+    • Giảm tải cho bác sĩ khâu sàng lọc ban đầu.
+    • Mở rộng khả năng tiếp cận y tế cho những vùng còn thiếu chuyên gia.
+
+    • Việc tách hệ thống thành hai mô hình riêng biệt giúp:
+    • Dễ dàng tinh chỉnh từng mô hình cho từng loại ảnh.
+    • Giảm thiểu sai số do nhiễu giữa dữ liệu dị loại
+    • Hệ thống dễ bảo trì mở rộng về sau  
+
+    3.2 Kiến trúc tổng thể
+        ◦ Hệ thống được thiết kế từ 2 module riêng biệt
+        ◦ Pipeline A - Phân loại ảnh X-ray bằng ResNet - 50
+        ◦ Pipeline B - Phân loại ảnh MRI bằng DenseNet – 121
+
+    3.3 Mô hình Resnet 50
+    3.3.1 Kiến trúc mô hình ResNet-50
+    • ResNet 50 là một mạng tích chập sâu gồm 50 lớp có thể train được và hơn 70 lớp ẩn. Mạng nổi bật với thiết kế residual connection cho phép gradient lan truyền xuyên suốt mạng mà không bị suy giảm. Điều này đặc biệt hữu ích khi huấn luyện trên các tập dữ liệu ảnh y tế có độ nhiễu cao.
+    • Chi tiết mô hình:
+    • include_top=False: loại bỏ tầng fully-connected mặc định của ResNet-50
+    • input_shape=(224, 224, 3): đầu vào ảnh RGB
+    • Các layer của backbone: đặt trainable=False để giữ nguyên trọng số
+    • Phần classification head:
+        ◦ GlobalAveragePooling2D()
+        ◦ Dropout(0.5)
+        ◦ Dense(128, activation='relu')
+        ◦ Dropout(0.5)
+        ◦ Dense(1, activation='sigmoid') ⟶ phân loại nhị phân
+    • Loss function: binary_crossentropy
+Optimizer: Adam với learning_rate=1e-4
+    • Metric: accuracy
+    3.3.2 Kiểu huấn luyện mô hình
+    • Nhóm sử dụng phương pháp Transfer Learning, nhằm tận dụng các đặc trưng đã học được từ ImageNet và tinh chỉnh mô hình cho phù hợp với ảnh X-ray:
+    • Giai đoạn 1 – Huấn luyện phần phân loại:
+    • Đóng băng toàn bộ backbone
+    • Chỉ huấn luyện các lớp Dense cuối
+    • Optimizer: Adam, learning rate: 1e-3
+    • Epoch: 10–15, có EarlyStopping để tránh overfitting sớm
+
+    • Giai đoạn 2: Fine-tuning mô hình:
+    • Sau khi phần classification head hội tụ, nhóm tiếp tục mở khóa một phần backbone để mô hình có thể tinh chỉnh các đặc trưng cao cấp phù hợp hơn với ảnh X-ray.
+    • Unfreeze các block cuối của ResNet-50, Nhóm thực hiện mở khóa (unfreeze) khối conv5_block3 trong cấu trúc ResNet-50
+    • Learning rate được giảm xuống 1e-5 để tránh phá vỡ trọng số pretrained
+    • Tiếp tục huấn luyện mô hình trong 20 epoch
+    • Kết hợp callback: EarlyStopping 
+
+    3.3.3 Chiến lược huấn luyện tổng thể và cấu hình thực nghiệm
+    • Bộ dữ liệu và cấu hình đầu vào 
+    • Nhóm sử dụng bộ dữ liệu Chest X-ray Images (Pneumonia), một tập dữ liệu công khai được phát hành trên nền tảng Kaggle để huấn luyện.x Dữ liệu bao gồm tổng cộng 5.863 ảnh X-ray ngực, được phân loại thành hai nhóm chính: NORMAL (bình thường) và PNEUMONIA (viêm phổi), trong đó lớp viêm phổi bao gồm cả do vi khuẩn và virus. Ảnh có định dạng JPG, được thu thập từ nhiều cơ sở y tế khác nhau, phản ánh sự đa dạng về độ tuổi, giới tính, tư thế chụp, độ phân giải và nhiễu ảnh – tương đối sát với thực tế lâm sàng. 
+    • Cấu trúc thư mục của dữ liệu được tổ chức như sau:
+    • /train/NORMAL
+    • /train/PNEUMONIA
+    • /test/NORMAL
+    • /test/PNEUMONIA
+    • Để chuẩn hóa và tạo batch ảnh trong quá trình huấn luyện, nhóm sử dụng lớp ImageDataGenerator của Keras. Việc tăng cường dữ liệu chỉ được áp dụng cho tập huấn luyện, còn các tập validation và test giữ nguyên ảnh gốc để đảm bảo tính khách quan khi đánh giá.
+    • Cấu hình cụ thể như sau:
+train_datagen = ImageDataGenerator(
+   rescale=1./255,
+   rotation_range=20,
+   zoom_range=0.2,
+   horizontal_flip=True,
+   validation_split=0.15
+ )
+    • rescale = 1./255: chuẩn hóa ảnh về khoảng [0,1]
+    • rotation_range = 20: xoay ảnh ngẫu nhiên trong khoảng ±20 độ (chỉ áp dụng với train_generator)
+    • zoom_range = 0.2: phóng to/thu nhỏ ±20% (chỉ áp dụng với train_generator)
+    • horizontal_flip = True: lật ngang ảnh ngẫu nhiên (chỉ áp dụng với train_generator)
+    • validation_split = 0.15: tách 15% dữ liệu trong thư mục train để làm validation
+            ▪ Ảnh đầu vào được resize về kích thước cố định 224 × 224 pixel. Các generator được khởi tạo như sau:
+    • train_generator: áp dụng tăng cường ảnh (augmentation), lấy subset='training' từ thư mục /train
+    • val_generator: lấy subset='validation' từ cùng thư mục, không áp dụng augmentation
+    • test_generator: load từ thư mục /test, chỉ chuẩn hóa về [0,1], không shuffle và không augmentation
+    • Việc chỉ áp dụng tăng cường dữ liệu cho tập train giúp mô hình học tốt hơn từ dữ liệu đa dạng, trong khi vẫn đảm bảo độ tin cậy và khách quan khi đánh giá trên tập validation và test.
+    • Tham số huấn luyện và callback
+    • Sau khi dữ liệu được xử lý và đưa vào các generator, mô hình được huấn luyện qua hai giai đoạn như đã trình bày ở mục 3.4.2. Nhằm tối ưu hiệu suất và tránh overfitting, nhóm cấu hình các tham số huấn luyện và callback như sau:
+    • Batch size: 32
+    • Epoch: tổng cộng 45 vòng lặp, chia thành hai giai đoạn:
+    • Giai đoạn 1 (huấn luyện classification head): 25 epoch
+    • Giai đoạn 2 (fine-tuning conv5_block3): 20 epoch
+            ▪ Optimizer: Adam
+    • learning rate giai đoạn 1: 1e-4
+    • learning rate giai đoạn 2: 1e-5
+            ▪ Loss function: Binary Crossentropy
+            ▪ Hàm kích hoạt đầu ra: Sigmoid (phù hợp với bài toán phân loại nhị phân)
+            ▪ Trong quá trình huấn luyện, các callback sau được sử dụng để kiểm soát hiệu suất mô hình và lưu trọng số tốt nhất:
+            ▪ EarlyStopping:
+    • Theo dõi giá trị val_loss
+    • patience = 5 (giai đoạn 1), 10 (giai đoạn 2)
+    • restore_best_weights = True (tự động khôi phục trọng số tốt nhất)
+            ▪ ModelCheckpoint (chỉ áp dụng trong giai đoạn fine-tuning):
+    • Theo dõi val_loss
+    • Lưu trọng số tốt nhất vào Drive
+    • save_best_only = True
+            ▪ Ngoài ra, mô hình được huấn luyện bằng phương thức model.fit() với:
+    • steps_per_epoch = len(train_generator)
+    • validation_steps = len(val_generator)
+    • shuffle = True cho tập huấn luyện
+    • Các callback giúp mô hình dừng sớm khi không còn cải thiện trên tập validation, đồng thời lưu lại phiên bản mô hình tối ưu nhất. Điều này giúp tiết kiệm thời gian huấn luyện và giảm nguy cơ overfitting.
+    • Cấu hình môi trường và thực nghiệm 
+    • Toàn bộ quá trình huấn luyện mô hình A được thực hiện trên nền tảng Google Colab, sử dụng GPU miễn phí do Google cung cấp (GPU T4) Việc tận dụng GPU giúp rút ngắn đáng kể thời gian huấn luyện, đặc biệt khi làm việc với các mô hình học sâu như ResNet-50 có số lượng tham số lớn.
+    • Mô hình được xây dựng và huấn luyện bằng thư viện TensorFlow (v2.x) kết hợp với Keras, với khả năng hỗ trợ xử lý tensor trên GPU và tương thích tốt với môi trường Colab.
+    • Trung bình thời gian huấn luyện giai đoạn 1 (25 epoch) dao động khoảng 15 phút
+    • Giai đoạn fine-tuning (20 epoch) mất thêm khoảng 25 phút tùy phiên bản GPU
+    • Tổng thời gian huấn luyện là khoảng 40 tới 45 phút 
+    • Sau mỗi giai đoạn, mô hình được lưu lại vào Google Drive để phục vụ cho quá trình đánh giá và sử dụng về sau. Việc lưu mô hình được thực hiện bằng lệnh model.save() dưới định dạng .h5, cho phép dễ dàng tải lại và triển khai tiếp.
+    • Ví dụ:
+model.save('/content/drive/MyDrive/pneumonia_resnet50_pretrained.h5')
+model.save('/content/drive/MyDrive/pneumonia_resnet50_test_final.h5')
+    • Việc sử dụng môi trường Colab không chỉ thuận tiện cho việc triển khai mô hình học sâu, mà còn đảm bảo khả năng tái lập kết quả trong các lần huấn luyện khác nhau.
+    3.4 Mô hình Densenet 
+    3.4.1 Kiến trúc mô hình DenseNet-121:
+    • DenseNet-121 là một kiến trúc mạng tích chập sâu với 121 lớp, nổi bật nhờ cơ chế kết nối dày đặc (dense connectivity). Trong mỗi dense block, đầu ra của tất cả các lớp trước đó được đưa vào lớp hiện tại thông qua phép nối (concatenation). Cách thiết kế này mang lại nhiều lợi ích:
+    • Tăng cường lan truyền gradient
+    • Tái sử dụng đặc trưng hiệu quả
+    • Giảm hiện tượng vanishing gradient khi mạng trở nên sâu
+    • Mạng DenseNet-121 được chia thành 4 dense block lớn, xen kẽ với các transition layer giúp giảm chiều và kiểm soát số lượng kênh đặc trưng.
+    • Trong đề tài này, nhóm sử dụng phiên bản DenseNet-121 pretrained trên ImageNet với cấu hình như sau:
+    • include_top=False: loại bỏ tầng fully connected mặc định
+    • input_shape=(224, 224, 3): ảnh MRI được resize về kích thước này
+    • Các lớp của backbone được đặt trainable=False ở giai đoạn đầu (phase 1)
+    • Phần classification head được thêm vào cuối mô hình:
+    • GlobalAveragePooling2D()
+    • Dropout(0.5)
+    • Dense(128, activation='relu')
+    • Dropout(0.5)
+    • Dense(4, activation='softmax') → tương ứng với 4 lớp phân loại: glioma, meningioma, pituitary, và no tumor
+    • Cấu hình compile ban đầu của mô hình:
+    • Loss function: categorical_crossentropy (vì bài toán phân loại đa lớp)
+    • Optimizer: Adam với learning_rate=1e-4
+    • Evaluation metric: accuracy
+    • Cấu trúc này giúp mô hình vừa tận dụng đặc trưng tổng quát từ ImageNet, vừa có khả năng thích nghi tốt với ảnh MRI – vốn chứa nhiều chi tiết mô mềm, giàu thông tin nhưng cũng phức tạp và dễ nhiễu.
+    3.4.2 Kiểu huấn luyện mô hình
+    • Để khai thác hiệu quả đặc trưng từ mô hình DenseNet-121 đã được huấn luyện trên ImageNet, nhóm áp dụng chiến lược Transfer Learning kết hợp Fine-tuning, chia làm hai giai đoạn huấn luyện rõ rệt:
+    • Giai đoạn 1 – Huấn luyện phần classification head (Transfer Learning)
+    • Trong giai đoạn đầu, toàn bộ phần backbone của DenseNet-121 được đóng băng (trainable=False), chỉ huấn luyện các lớp phân loại được thêm vào cuối mạng. Mục tiêu là giúp mô hình học cách kết nối các đặc trưng đã có với nhiệm vụ phân loại ảnh MRI não bộ.
+    • Cấu hình:
+    • Epoch: 20
+    • Loss function: categorical_crossentropy
+    • Optimizer: Adam (learning_rate = 1e-4)
+    • Output: Dense(4, activation='softmax') cho 4 lớp bệnh
+    • Metric: accuracy
+    • Callbacks sử dụng:
+    • EarlyStopping: monitor='val_loss', patience=5, restore_best_weights=True
+    • ModelCheckpoint: monitor='val_accuracy', lưu mô hình tốt nhất tại brain_mri_densenet_transfer_phase1_best.h5
+    • Mô hình sau huấn luyện được lưu tại:
+    • brain_mri_densenet_transfer_phase1_final.h5
+
+    • Giai đoạn 2 – Fine-tuning mô hình
+Sau khi phần classification head ổn định, nhóm mở khóa một phần backbone để tinh chỉnh thêm các đặc trưng trừu tượng cao. Cụ thể, các layer chứa “conv4” và “conv5” trong tên được unfreeze (trainable=True), các lớp còn lại vẫn giữ nguyên.
+Cấu hình fine-tuning:
+    • Epoch: 20
+    • Optimizer: Adam (learning_rate = 1e-5)
+    • Loss function và metric: giữ nguyên như trước
+Callbacks:
+    • EarlyStopping: monitor='val_loss', patience=5
+    • ModelCheckpoint: monitor='val_accuracy', lưu mô hình tốt nhất tại brain_mri_densenet_transfer_phase2_best.h5
+Sau quá trình tinh chỉnh, mô hình cuối cùng được lưu tại:
+    • brain_mri_densenet_transfer_phase2_final.h5
+
+    3.4.3 Chiến lược huấn luyện tổng thể và cấu hình thực nghiệm 
+    • Để huấn luyện mô hình DenseNet-121 cho nhiệm vụ phân loại khối u não từ ảnh cộng hưởng từ (MRI), nhóm sử dụng bộ dữ liệu Brain Tumor MRI Dataset do Masoud Nickparvar chia sẻ công khai trên nền tảng Kaggle. Bộ dữ liệu này là sự kết hợp từ ba nguồn độc lập: Figshare, SARTAJ Dataset và Br35H. Sau quá trình kiểm định chất lượng, tác giả đã loại bỏ các ảnh không đáng tin cậy từ SARTAJ (do nhãn “glioma” bị phân loại sai) và thay thế bằng ảnh từ Figshare để đảm bảo tính chính xác.
+    • Tổng cộng bộ dữ liệu bao gồm 7023 ảnh MRI não người, được phân loại thành bốn nhóm bệnh lý:
+    • No Tumor (không có khối u)
+    • Glioma Tumor
+    • Meningioma Tumor
+    • Pituitary Tumor
+    • Ảnh được chụp ở mặt cắt ngang não bộ, định dạng đa dạng (RGB hoặc grayscale), và được resize về kích thước chuẩn (224 × 224 × 3) nhằm tương thích với đầu vào của mô hình DenseNet-121. Tất cả điểm ảnh được chuẩn hóa về dải giá trị [0, 1] bằng phép chia 255. Đầu ra của mô hình là vector xác suất gồm 4 phần tử tương ứng với bốn lớp phân loại, nên nhãn được mã hóa dưới dạng one-hot vector.
+    • Tập dữ liệu được chia theo tỷ lệ 70% train, 15% validation và 15% test để đảm bảo tính khách quan trong đánh giá mô hình. Trong suốt quá trình huấn luyện, nhóm sử dụng ImageDataGenerator để đọc ảnh trực tiếp từ thư mục mà không áp dụng kỹ thuật tăng cường dữ liệu (data augmentation), do ảnh y học yêu cầu giữ nguyên cấu trúc mô học và giải phẫu vốn có – đặc biệt quan trọng trong chẩn đoán hình ảnh não bộ.
+    • Cấu hình đầu vào
+    • Ảnh đầu vào được chuẩn hóa và nạp vào mô hình thông qua công cụ ImageDataGenerator của Keras. Dưới đây là cấu hình chi tiết:
+    • Kích thước ảnh: (224 × 224 × 3).
+ Tất cả ảnh MRI được resize về kích thước này để phù hợp với kiến trúc DenseNet-121 pretrained trên ImageNet. Mặc dù một số ảnh gốc là ảnh grayscale, toàn bộ dữ liệu đều được chuyển sang định dạng RGB.
+    • Chuẩn hóa dữ liệu:
+ Giá trị điểm ảnh được chia cho 255 để chuẩn hóa về khoảng [0, 1].
+
+
+    • Tăng cường dữ liệu (Data Augmentation):
+ Nhằm cải thiện khả năng tổng quát của mô hình và tăng độ đa dạng của ảnh huấn luyện, nhóm áp dụng các kỹ thuật augmentation sau trên tập huấn luyện:
+        ◦ rotation_range = 20 (xoay ảnh ngẫu nhiên trong khoảng ±20 độ)
+        ◦ zoom_range = 0.2 (phóng to hoặc thu nhỏ ngẫu nhiên)
+        ◦ horizontal_flip = True (lật ảnh theo chiều ngang)
+    • Lưu ý: Chỉ áp dụng augmentation cho tập huấn luyện. Tập validation và test không áp dụng tăng cường nhằm đảm bảo tính khách quan trong đánh giá.
+    • Định dạng nhãn:
+ Mỗi ảnh được gán nhãn dưới dạng one-hot vector, phù hợp với bài toán phân loại đa lớp (4 lớp). Ví dụ:
+        ◦ Glioma Tumor → [1, 0, 0, 0]
+        ◦ Meningioma Tumor → [0, 1, 0, 0]
+        ◦ Pituitary Tumor → [0, 0, 1, 0]
+        ◦ No Tumor → [0, 0, 0, 1]
+    • Batch size: 32
+    • Cấu trúc thư mục dữ liệu đầu vào:
+
+
+
+    • Tập dữ liệu được phân chia theo tỷ lệ xấp xỉ 70% train, 15% validation và 15% test. Dữ liệu được nạp vào mô hình bằng các generator train_generator, val_generator và test_generator tương ứng.
+
+    • Tham số huấn luyện và callback sử dụng
+    • Sau khi dữ liệu được xử lý và đưa vào các generator, mô hình DenseNet-121 được huấn luyện qua hai giai đoạn như đã trình bày ở mục 3.5.2. Nhằm tối ưu hiệu suất và hạn chế hiện tượng overfitting, nhóm triển khai các tham số huấn luyện và callback như sau:
+    • Batch size: 32
+    • Epoch: tổng cộng 40 vòng lặp, chia thành hai giai đoạn:
+        ◦ Giai đoạn 1 (huấn luyện classification head): 20 epoch
+        ◦ Giai đoạn 2 (fine-tuning các khối conv4 và conv5): 20 epoch
+    • Optimizer: Adam
+        ◦ learning rate giai đoạn 1: 1e-4
+        ◦ learning rate giai đoạn 2: 1e-5
+    • Loss function: Categorical Crossentropy (phù hợp với bài toán phân loại đa lớp)
+    • Hàm kích hoạt đầu ra: Softmax (cho 4 lớp: glioma, meningioma, pituitary và no tumor)
+            ▪ Trong quá trình huấn luyện, các callback sau được áp dụng nhằm giám sát hiệu suất và tự động lưu lại trọng số tốt nhất của mô hình:
+    • EarlyStopping:
+        ◦ Theo dõi giá trị val_loss
+        ◦ patience = 5 (giai đoạn 1), 5 (giai đoạn 2)
+        ◦ restore_best_weights = True (tự động khôi phục trọng số tốt nhất)
+    • ModelCheckpoint (chỉ sử dụng ở giai đoạn fine-tuning):
+        ◦ Theo dõi val_accuracy
+        ◦ Lưu trọng số tốt nhất vào thư mục chỉ định
+        ◦ save_best_only = True
+    • Ngoài ra, mô hình được huấn luyện với phương thức model.fit() cùng các thông số:
+    • steps_per_epoch = len(train_generator)
+    • validation_steps = len(val_generator)
+    • shuffle = True (cho tập huấn luyện)
+    • Các callback này giúp mô hình dừng huấn luyện sớm khi không còn cải thiện trên tập validation, đồng thời đảm bảo lưu lại phiên bản mô hình tối ưu nhất. Nhờ đó, quá trình huấn luyện trở nên hiệu quả hơn, tiết kiệm thời gian và giảm nguy cơ overfitting — đặc biệt quan trọng trong bối cảnh dữ liệu ảnh y học dễ bị nhiễu và phân bố không đồng đều giữa các lớp.
+    • Cấu hình môi trường và thực nghiệm 
+    • Toàn bộ quá trình huấn luyện mô hình B được thực hiện trên nền tảng Google Colab, tận dụng GPU miễn phí (GPU T4) do Google cung cấp. Việc sử dụng GPU hỗ trợ tăng tốc tính toán đáng kể, đặc biệt hữu ích với các mô hình học sâu như DenseNet-121 – vốn có cấu trúc phức tạp với nhiều lớp tích chập và dense connection.
+    • Mô hình được xây dựng và huấn luyện bằng thư viện TensorFlow (phiên bản 2.x) kết hợp Keras. Colab cung cấp môi trường tương thích sẵn với TensorFlow, cho phép triển khai mô hình một cách mượt mà trên GPU mà không cần cấu hình thêm.
+    • Thời gian huấn luyện thực tế:
+    • Giai đoạn 1 (Transfer Learning – huấn luyện classification head trong 20 epoch): khoảng 15 - 17 phút.
+    • Giai đoạn 2 (Fine-tuning – mở một phần các layer conv4 và conv5 trong 20 epoch): dao động khoảng 25-30 phút.
+ ⇒ Tổng thời gian huấn luyện khoảng 40-50 phút, tùy phiên bản GPU và điều kiện kết nối.
+    • Sau mỗi giai đoạn huấn luyện, mô hình được lưu lại dưới định dạng .h5 vào Google Drive bằng lệnh model.save(). Điều này đảm bảo mô hình có thể dễ dàng tải lại, đánh giá hoặc fine-tune thêm trong tương lai.
+    • Ví dụ:
+ model.save('/content/brain_mri_densenet_transfer_phase1_final.h5')
+ model.save('/content/brain_mri_densenet_transfer_phase2_final.h5')
+    • Việc triển khai mô hình trên Google Colab không chỉ giúp giảm chi phí phần cứng, mà còn thuận tiện cho việc chia sẻ, kiểm thử và tái lập kết quả nghiên cứu một cách nhất quán.
+    3.5 Ưu điểm của thiết kế hai mô hình
+Việc phân chia hệ thống chẩn đoán hình ảnh y học thành hai mô hình riêng biệt – mô hình A xử lý ảnh X-ray bằng ResNet-50 và mô hình B xử lý ảnh MRI bằng DenseNet-121 – mang lại nhiều lợi ích vượt trội về mặt kỹ thuật, hiệu quả huấn luyện và khả năng triển khai trong thực tế. Cấu trúc thiết kế theo hướng phân tầng giúp giảm độ phức tạp tổng thể, tăng tính linh hoạt, khả năng mở rộng và dễ dàng bảo trì trong tương lai.
+    3.5.1 Phân tách nhiệm vụ rõ ràng, tối ưu hoá chuyên biệt
+    • Thay vì xây dựng một mô hình duy nhất xử lý mọi loại ảnh y học đầu vào, việc chia nhỏ thành hai mô hình cho phép mỗi mô hình tập trung tối ưu cho một loại ảnh cụ thể: ảnh X-ray và ảnh MRI.
+    • Mô hình A chỉ học cách nhận diện viêm phổi từ ảnh X-ray – loại ảnh có cấu trúc phẳng, ít chi tiết và thường được dùng trong sàng lọc.
+    • Mô hình B chuyên biệt cho ảnh MRI não, nơi cần khả năng trích xuất đặc trưng sâu và chính xác hơn để nhận diện các loại u não.
+    • Sự chuyên biệt này giúp tăng hiệu quả huấn luyện, rút ngắn thời gian hội tụ và cho kết quả tốt hơn so với một hệ thống tích hợp phức tạp.
+    3.5.2 Tăng tính mô-đun, dễ kiểm soát và bảo trì
+ Hai mô hình được xây dựng và hoạt động độc lập, cho phép kiểm thử và cải tiến từng thành phần mà không ảnh hưởng đến phần còn lại. Nếu cần nâng cấp mô hình A (ví dụ thử EfficientNet thay vì ResNet-50), ta có thể làm điều đó mà không ảnh hưởng đến mô hình B. Điều này tăng tính linh hoạt, đặc biệt quan trọng trong nghiên cứu và triển khai dài hạn.
+    3.5.3 Tối ưu hóa tài nguyên huấn luyện và dữ liệu
+Mỗi mô hình có thể được huấn luyện trên tập dữ liệu riêng phù hợp với đầu vào của nó, từ đó tận dụng tốt các nguồn dữ liệu sẵn có.
+    • Dữ liệu X-ray được xử lý độc lập với MRI, giúp tránh nhiễu và mất cân bằng giữa các loại ảnh.
+    • Quá trình huấn luyện có thể song song, giảm chi phí và thời gian xử lý.
+    • Cấu trúc mô hình A và B cũng có thể được triển khai trên các thiết bị khác nhau trong môi trường thực tế.
+    3.5.4 Khả năng mở rộng linh hoạt
+ Thiết kế hai tầng mô hình tạo tiền đề cho việc mở rộng hệ thống theo nhu cầu trong tương lai:
+    • Thêm mô hình mới cho các loại ảnh khác (ví dụ: CT Scan, siêu âm, ảnh nội soi).
+    • Mở rộng mô hình A hoặc B với các kiến trúc mạnh hơn như EfficientNet, Vision Transformer (ViT).
+    • Tích hợp các mô-đun phân tích đa phương thức (multi-modal) để kết hợp dữ liệu phi hình ảnh như hồ sơ bệnh án, xét nghiệm,…
+    3.5.5 Hỗ trợ và cải tiến chuyên sâu
+    • Mỗi mô hình là một "module nghiên cứu" độc lập. Điều này giúp nhóm nghiên cứu dễ dàng thử nghiệm các kỹ thuật mới, so sánh hiệu quả, hoặc đào sâu vào từng hướng:
+    • Mô hình A: tối ưu hóa CNN cho ảnh X-ray, áp dụng các kỹ thuật tăng cường dữ liệu, Grad-CAM, hay transfer learning nâng cao.
+    • Mô hình B: thử nghiệm với kiến trúc sâu hơn, học bán giám sát hoặc tiền huấn luyện (self-supervised) trên ảnh MRI.
+    • Việc tách rời nhiệm vụ không chỉ tăng tính ổn định hệ thống mà còn mở ra nhiều hướng cải tiến trong tương lai gần và xa.
+
+Chương 4 ĐÁNH GIÁ KẾT QUẢ THỰC NGHIỆM
+Sau khi hoàn tất việc thiết kế và huấn luyện hai mô hình học sâu – ResNet-50 cho ảnh X-ray (mô hình A) và DenseNet-121 cho ảnh MRI (mô hình B) – chương này sẽ trình bày kết quả thực nghiệm thông qua đánh giá mô hình trên tập kiểm thử (test set).
+Do hạn chế về môi trường làm việc trên Google Colab và không lưu lại biến history sau quá trình huấn luyện, nhóm không thể trực quan hoá biểu đồ loss/accuracy theo từng epoch. Tuy nhiên, kết quả đánh giá cuối cùng trên tập test vẫn phản ánh được độ chính xác của mô hình và khả năng tổng quát hóa với dữ liệu chưa từng thấy trước đó.
+Nội dung chính của chương bao gồm:
+    • Đánh giá độ chính xác (accuracy) của từng mô hình trên tập test.
+    • Trình bày ma trận nhầm lẫn (confusion matrix) giúp phân tích chi tiết các dự đoán đúng/sai giữa các lớp.
+    • Nếu có, minh hoạ trực quan bằng kỹ thuật Grad-CAM để hiểu rõ hơn về vùng mà mô hình tập trung vào khi đưa ra dự đoán.
+    • Kết quả này đóng vai trò quan trọng để kiểm chứng chất lượng mô hình, từ đó làm nền tảng cho việc triển khai thực tế hoặc cải tiến trong các giai đoạn tiếp theo.
+4.1 Mục tiêu đánh giá
+Mục tiêu của giai đoạn đánh giá là kiểm tra hiệu suất của hai mô hình đã huấn luyện trên tập dữ liệu kiểm tra (test set) hoàn toàn độc lập, nhằm xác định mức độ chính xác, độ tin cậy và khả năng tổng quát hóa của hệ thống trong môi trường thực tế.
+Cụ thể, quá trình đánh giá tập trung vào các khía cạnh sau:
+    • Độ chính xác (Accuracy): Tỷ lệ mẫu được mô hình phân loại đúng trên tổng số mẫu trong tập test.
+    • Độ nhạy (Recall), độ đặc hiệu (Precision) và F1-score: Các chỉ số thống kê quan trọng nhằm đánh giá hiệu suất mô hình trên từng lớp bệnh lý, đặc biệt hữu ích trong các bài toán y tế có mất cân bằng dữ liệu.
+    • Ma trận nhầm lẫn (Confusion Matrix): Trực quan hóa chi tiết các trường hợp mô hình dự đoán đúng và sai giữa các lớp, giúp phát hiện điểm yếu trong phân biệt bệnh lý.
+    • Tỷ lệ lỗi (Loss): Đo độ lệch trung bình giữa đầu ra mô hình và nhãn thực tế, phản ánh mức độ tối ưu hóa của mô hình trong quá trình học.
+    • Grad-CAM (Gradient-weighted Class Activation Mapping): Là công cụ trực quan hóa giúp giải thích lý do mô hình đưa ra quyết định. Việc áp dụng Grad-CAM giúp kiểm tra xem mô hình có thực sự tập trung vào vùng tổn thương trong ảnh y học hay không, từ đó đánh giá mức độ đáng tin cậy (trustworthiness) của mô hình trong thực tế lâm sàng.
+
+
+    • Biểu đồ trực quan: Các biểu đồ so sánh loss và accuracy, confusion matrix, hoặc Grad-CAM sẽ được sử dụng để minh hoạ kết quả đánh giá một cách sinh động và dễ hiểu.
+Việc tổng hợp các chỉ số định lượng và trực quan nêu trên sẽ cung cấp một cái nhìn toàn diện về khả năng hoạt động của hệ thống, đồng thời tạo nền tảng cho việc cải tiến trong tương lai.
+4.2 Đánh giá mô hình A – Chẩn đoán viêm phổi bằng ResNet-50
+Mô hình A sử dụng kiến trúc ResNet-50 đã được huấn luyện theo hai giai đoạn: giai đoạn đầu huấn luyện classification head với backbone đóng băng hoàn toàn, và giai đoạn fine-tuning unfreeze một phần các block conv5. Sau khi hoàn thành huấn luyện, mô hình được đánh giá trên tập test gồm 625 ảnh X-ray, chia thành hai lớp: NORMAL và PNEUMONIA.
+4.2.1 Độ chính xác và độ mất mát trên tập kiểm tra
+Kết quả đánh giá cho thấy mô hình đạt độ chính xác (accuracy) 0.8038 và hàm mất mát (loss) là 0.5040. Dù có độ chính xác tương đối tốt, nhưng giá trị loss vẫn ở mức trung bình, cho thấy một số ảnh vẫn bị phân loại sai đáng kể.
+
+4.2.2 Ma trận nhầm lẫn (Confusion Matrix)
+Ma trận nhầm lẫn trong Hình 4.2 phản ánh chi tiết quá trình phân loại của mô hình giữa hai lớp NORMAL và PNEUMONIA. Kết quả cụ thể như sau:
+    • 163/234 ảnh NORMAL được phân loại đúng
+    • 378/391 ảnh PNEUMONIA được phân loại đúng
+    • Mô hình có xu hướng nhầm NORMAL thành PNEUMONIA (71 ảnh), nhưng rất ít nhầm chiều ngược lại (13 ảnh)
+4.2.3 Báo cáo phân loại chi tiết
+Bảng dưới đây thể hiện precision, recall, F1-score và số lượng ảnh (support) của từng lớp trên tập kiểm tra:
+Lớp
+Precision
+Recall
+F1-score
+Support
+NORMAL
+0.93
+0.70
+0.80
+234
+PNEUMONIA
+0.84
+0.97
+0.90
+391
+Accuracy
+–
+–
+0.87
+625
+Macro avg
+0.88
+0.83
+0.85
+625
+Weighted avg
+0.87
+0.87
+0.86
+625
+Nhìn chung, mô hình đạt F1-score rất cao cho lớp PNEUMONIA (0.90) và precision cao cho NORMAL (0.93). Tuy nhiên, recall của NORMAL chỉ ở mức 0.70, cho thấy mô hình bỏ sót khá nhiều ca bình thường, dễ gây ra dương tính giả trong sàng lọc thực tế.
+4.2.4 Trực quan hoá Grad-CAM
+Việc trực quan hoá vùng ảnh mà mô hình tập trung vào khi dự đoán được thực hiện thông qua Grad-CAM. Nếu vùng được tô sáng trùng khớp với vị trí tổn thương thực tế trên ảnh X-ray, điều này chứng minh rằng mô hình không chỉ dự đoán đúng mà còn "chú ý đúng chỗ" – nâng cao tính đáng tin cậy trong chẩn đoán.
+
+
+
+
+
+4.3 Đánh giá mô hình B – Chẩn đoán u não bằng DenseNet121
+Mô hình B sử dụng kiến trúc DenseNet-121, được huấn luyện trên ảnh MRI nhằm phân loại 4 loại tình trạng: glioma, meningioma, pituitary tumor và ảnh không có u (no tumor). Sau hai giai đoạn huấn luyện (transfer learning và fine-tuning), mô hình được đánh giá toàn diện trên tập test với tổng cộng 1.320 ảnh chưa từng thấy.
+4.3.1 Độ chính xác và độ mất mát trên tập kiểm tra
+Trên tập test, mô hình đạt độ chính xác (accuracy) là 0.9803 và hàm mất mát (loss) chỉ 0.0800 — cho thấy mô hình học hiệu quả và tổng quát hoá tốt với dữ liệu chưa từng thấy.
+
+4.3.2 Ma trận nhầm lẫn (Confusion Matrix)
+Ma trận nhầm lẫn thể hiện hiệu suất phân loại của mô hình trên từng lớp cụ thể. Kết quả cho thấy mô hình phân loại chính xác gần tuyệt đối ở cả 4 lớp:
+Lớp gốc
+Glioma
+Meningioma
+No Tumor
+Pituitary
+Glioma
+299
+4
+2
+2
+Meningioma
+2
+288
+5
+12
+No Tumor
+0
+2
+402
+1
+Pituitary
+0
+0
+0
+301
+Nhìn chung:
+    • Mô hình nhận diện u pituitary chính xác tuyệt đối (301/301)
+    • Một số nhầm lẫn giữa glioma và meningioma, do đặc trưng hình ảnh chồng lấn
+    • Lớp “no tumor” đạt recall 0.99, rất đáng tin cậy trong sàng lọc ban đầu
+4.3.3 Báo cáo phân loại chi tiết
+
+Lớp
+Precision
+Recall
+F1-score
+Số mẫu (Support)
+Glioma
+0.99
+0.97
+0.98
+307
+Meningioma
+0.94
+0.94
+0.96
+307
+No Tumor
+0.98
+0.99
+0.99
+405
+Pituitary
+0.95
+1.00
+0.98
+301
+Accuracy
+–
+–
+0.98
+1320
+Macro avg
+0.96
+0.98
+0.98
+1320
+Weighted avg
+0.98
+0.98
+0.98
+1320
+→ Các chỉ số đều đạt trên 0.94 ở mọi lớp — cho thấy mô hình có hiệu năng cao và ổn định trong nhận diện đa loại u não.
+4.3.4 Trực quan hóa Grad-CAM
+
+
+
+
+
+
+
+
+
+4.4 So sánh hai mô hình ResNet-50 và DenseNet-121
+Sau quá trình huấn luyện và đánh giá trên các tập dữ liệu kiểm tra độc lập, hai mô hình trong hệ thống — mô hình A (ResNet-50) cho ảnh X-ray và mô hình B (DenseNet-121) cho ảnh MRI — đã cho thấy hiệu suất khác biệt rõ rệt tùy theo tính chất của dữ liệu và độ phức tạp của bài toán.
+Bảng dưới đây tổng hợp kết quả đánh giá trên tập test:
+Tiêu chí
+Mô hình A (ResNet-50)
+Mô hình B (DenseNet-121)
+Loại dữ liệu
+Ảnh X-ray (nhị phân)
+Ảnh MRI (4 lớp)
+Accuracy
+80.38%
+98.03%
+Loss
+0.5040
+0.0800
+Số lớp phân loại
+2(NORMAL,PNEUMONIA)
+4 (glioma, meningioma, pituitary, no tumor)
+Precision trung bình (macro)
+88%
+96%
+Recall trung bình (macro)
+83%
+98%
+F1-score trung bình (macro)
+85%
+98%
+Nhầm lẫn nhiều nhất
+NORMAL→PNEUMONIA
+glioma ↔ meningioma
+Khả năng tập trung Grad-CAM
+Có
+Có
+Nhận xét:
+    • Hiệu suất: DenseNet-121 cho thấy hiệu suất vượt trội hơn so với ResNet-50 cả về độ chính xác và độ ổn định, ngay cả trong bài toán phân loại đa lớp phức tạp hơn.
+    • Phân phối lỗi: ResNet-50 có xu hướng phân loại nhầm các ảnh NORMAL thành PNEUMONIA, gây ra dương tính giả. Trong khi đó, DenseNet-121 chỉ gặp nhầm lẫn nhẹ giữa glioma và meningioma — hai loại u có đặc trưng hình ảnh tương đối gần nhau.
+    • Mức độ tin cậy: Kết quả Grad-CAM cho thấy cả hai mô hình đều tập trung vào các vùng tổn thương chính trong ảnh đầu vào, củng cố tính giải thích và khả năng sử dụng trong lâm sàng.
+    • Tính ứng dụng: Với độ chính xác cao, DenseNet-121 phù hợp triển khai trong môi trường chẩn đoán chuyên sâu. Trong khi đó, ResNet-50 có thể hữu ích ở tuyến đầu (sàng lọc ban đầu), nơi yêu cầu tốc độ cao với độ phân giải ảnh thấp hơn.
+    • Kết luận: Cả hai mô hình đều mang lại giá trị ứng dụng thực tế rõ rệt trong hỗ trợ chẩn đoán hình ảnh y học. DenseNet-121 cho thấy khả năng vượt trội ở bài toán phức tạp, còn ResNet-50 thể hiện hiệu năng đủ tốt cho các tác vụ nhị phân với chi phí tính toán thấp hơn.
+
+
+
+
+
+
+
+
+
+
+
