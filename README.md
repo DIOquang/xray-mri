@@ -11,9 +11,14 @@ Dự án Deep Learning phân loại hình ảnh y tế sử dụng **DenseNet-12
 - **Precision (PNEUMONIA)**: 94%
 - **Recall (PNEUMONIA)**: 81%
 - **F1-Score (Weighted)**: 85%
+- **Training**: 2 epochs (Phase 1)
 
-### Model Brain MRI Classification
-- **Status**: Đang phát triển
+### Model Brain MRI Classification ⭐
+- **Test Accuracy**: **97.73%** 🔥
+- **Precision (Weighted)**: 98%
+- **Recall (Weighted)**: 98%
+- **F1-Score (Weighted)**: 98%
+- **Training**: Phase 1 (20 epochs) + Phase 2 (20 epochs)
 - **Classes**: 4 loại (Glioma, Meningioma, Pituitary, No Tumor)
 
 ## 🏗️ Kiến trúc
@@ -215,15 +220,51 @@ weighted avg       0.86      0.84      0.85       624
 - False Negatives: 76
 - True Positives (PNEUMONIA): 314
 
+---
+
+### Brain MRI Model 🏆
+
+**Training History**:
+- **Phase 1** (20 epochs): val_accuracy từ 62.26% → 86.60%
+- **Phase 2** (20 epochs): val_accuracy từ 91.92% → **97.15%**
+- **Best epoch**: 39 với val_accuracy = 97.15%
+
+**Test Set Performance** (97.73% accuracy):
+```
+              precision    recall  f1-score   support
+
+      glioma       0.98      0.97      0.98       244
+  meningioma       0.98      0.95      0.96       248
+     notumor       0.99      0.99      0.99       300
+   pituitary       0.96      1.00      0.98       265
+
+    accuracy                           0.98      1057
+   macro avg       0.98      0.98      0.98      1057
+weighted avg       0.98      0.98      0.98      1057
+```
+
+**Confusion Matrix Highlights**:
+- Glioma: 237/244 correct (97.13%)
+- Meningioma: 236/248 correct (95.16%)
+- No Tumor: 297/300 correct (99.00%)
+- Pituitary: 265/265 correct (100%!) 🎯
+
+**Visualizations Generated**:
+- ✅ Training history curves (accuracy & loss)
+- ✅ Confusion matrix heatmap
+- ✅ Grad-CAM visualizations (4 samples)
+
 ## 🔬 Future Work
 
-- [ ] Complete Brain MRI model training
-- [ ] Implement Grad-CAM visualization
-- [ ] Add model explainability features
+- [x] Complete Brain MRI model training ✅
+- [x] Implement Grad-CAM visualization ✅
+- [ ] Add model explainability features (LIME, SHAP)
 - [ ] Deploy models with Flask/FastAPI
 - [ ] Create web interface for predictions
 - [ ] Experiment with other architectures (ResNet-50, EfficientNet)
 - [ ] Ensemble methods
+- [ ] Model quantization for mobile deployment
+- [ ] Real-time inference optimization
 
 ## 📝 License
 
