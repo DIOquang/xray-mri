@@ -1,0 +1,59 @@
+.
+├── .DS_Store
+├── pom.xml
+├── src
+│   ├── .DS_Store
+│   └── main
+│       ├── .DS_Store
+│       ├── java
+│       │   └── com
+│       │       └── mycompany
+│       │           └── app
+│       │               ├── controller
+│       │               ├── dao
+│       │               └── model
+│       └── webapp
+│           ├── .DS_Store
+│           ├── WEB-INF
+│           │   └── web.xml
+│           └── index.jsp
+├── target
+│   ├── .DS_Store
+│   ├── MyWebApp
+│   │   ├── META-INF
+│   │   ├── WEB-INF
+│   │   │   ├── classes
+│   │   │   └── web.xml
+│   │   └── index.jsp
+│   ├── MyWebApp.war
+│   ├── apache-tomcat-maven-plugin
+│   ├── classes
+│   │   └── com
+│   │       └── mycompany
+│   │           └── app
+│   │               ├── controller
+│   │               ├── dao
+│   │               └── model
+│   ├── maven-archiver
+│   │   └── pom.properties
+│   ├── test-classes
+│   └── tomcat
+│       ├── conf
+│       │   ├── logging.properties
+│       │   ├── tomcat-users.xml
+│       │   └── web.xml
+│       ├── logs
+│       │   └── access_log.2025-10-27
+│       ├── webapps
+│       └── work
+│           └── Tomcat
+│               └── localhost
+│                   └── _
+│                       └── org
+│                           └── apache
+│                               └── jsp
+│                                   ├── index_jsp.class
+│                                   └── index_jsp.java
+└── tree.txt
+
+38 directories, 19 files

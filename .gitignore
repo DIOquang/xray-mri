@@ -1,3 +1,6 @@
+# Build artifacts (Java/Maven)
+MyWebApp/target/
+
 # OS
 .DS_Store
 
@@ -23,6 +26,7 @@ models/**
 
 # Logs
 logs/**
+*.log
 
 # VS Code
 .vscode/
